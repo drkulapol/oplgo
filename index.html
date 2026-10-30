@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ลูกหนี้ OP อปท. (LGO) vs REP</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+:root{--bg:#f4f6f9;--card:#fff;--ink:#1f2933;--mut:#66788a;--line:#e1e6ec;--pri:#0f6e8c;--pri2:#e6f3f7;
+--ok:#1a8a4a;--okb:#e5f5ec;--lo:#c2410c;--lob:#fff0e6;--hi:#6d28d9;--hib:#f1eafe;--er:#b91c1c;--erb:#fdecec;--na:#64748b;--nab:#eef1f5}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Sarabun,system-ui,sans-serif;font-size:15px}
+.nav{background:#0b3d4f;color:#fff;padding:8px 16px;display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center}
+.nav b{margin-right:10px}.nav a{color:#cfe8f0;text-decoration:none;padding:4px 10px;border-radius:6px;font-size:14px}
+.nav a:hover{background:#ffffff1f}.nav a.on{background:#fff;color:#0b3d4f;font-weight:700}
+.wrap{max-width:1400px;margin:0 auto;padding:16px}
+h1{font-size:22px;margin:6px 0 2px}.sub{color:var(--mut);margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px}
+.up{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:800px){.up{grid-template-columns:1fr}}
+.drop{border:2px dashed #b9c6d3;border-radius:10px;padding:16px;text-align:center;cursor:pointer;background:#fafcfd}
+.drop.dg{border-color:var(--pri);background:var(--pri2)}.drop h3{margin:0 0 4px;font-size:16px}.drop small{color:var(--mut)}
+.drop .st{margin-top:8px;font-size:13px;color:var(--pri);white-space:pre-line}
+button,.btn{font:inherit;border:1px solid var(--pri);background:var(--pri);color:#fff;border-radius:7px;padding:6px 14px;cursor:pointer}
+button.g{background:#fff;color:var(--pri)}button:disabled{opacity:.5;cursor:default}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.k{border-radius:10px;padding:10px 12px;border:1px solid var(--line);background:#fff;cursor:pointer}
+.k.sel{outline:3px solid var(--pri)}.k .l{font-size:13px;color:var(--mut)}.k .v{font-size:22px;font-weight:700}.k .a{font-size:13px}
+.k.ok{background:var(--okb)}.k.lo{background:var(--lob)}.k.hi{background:var(--hib)}.k.er{background:var(--erb)}.k.na{background:var(--nab)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}.tabs button{background:#fff;color:var(--pri)}.tabs button.on{background:var(--pri);color:#fff}
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+input,select{font:inherit;padding:5px 8px;border:1px solid #c5d0da;border-radius:6px}
+.tw{overflow:auto;max-height:70vh;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:14px}th,td{padding:5px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{background:#eef3f7;position:sticky;top:0;z-index:1;text-align:left;cursor:pointer}td.n,th.n{text-align:right}
+tr.x{cursor:pointer}tr.x:hover{background:#f6fafc}tr.det td{background:#fbfcfd;white-space:normal}
+.tag{display:inline-block;padding:1px 8px;border-radius:10px;font-size:12.5px;font-weight:600}
+.t-ok{background:var(--okb);color:var(--ok)}.t-lo{background:var(--lob);color:var(--lo)}.t-hi{background:var(--hib);color:var(--hi)}
+.t-er{background:var(--erb);color:var(--er)}.t-na{background:var(--nab);color:var(--na)}
+.neg{color:var(--er)}.pos{color:var(--ok)}.mut{color:var(--mut)}.s{text-decoration:line-through;color:#9aa5b1}
+.inner{width:auto;font-size:13px}.inner th{position:static;background:#f2f5f8}
+tfoot td{font-weight:700;background:#f3f6f9;position:sticky;bottom:0}
+.note{font-size:13px;color:var(--mut);line-height:1.6}
+footer{text-align:center;color:var(--mut);font-size:13px;line-height:1.7;padding:20px 16px 30px}footer a{color:var(--pri)}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="nav">
+  <b>ลูกหนี้รายตัว</b>
+  <a href="https://drkulapol.github.io/opofc/">ลูกหนี้ OP เบิกได้</a>
+  <a href="https://drkulapol.github.io/ipofc/">ลูกหนี้ IPD เบิกได้</a>
+  <a href="https://drkulapol.github.io/ipuc/">ลูกหนี้ IPD UC</a>
+  <a href="https://drkulapol.github.io/check-op-uc/">ลูกหนี้ OP ON TOP</a>
+  <a href="https://drkulapol.github.io/opstp/">ลูกหนี้ OP STP</a>
+  <a href="https://drkulapol.github.io/ipstp/">ลูกหนี้ IP STP</a>
+  <a class="on" href="https://drkulapol.github.io/oplgo/">ลูกหนี้ OP อปท.</a>
+</div>
+<div class="wrap">
+<h1>จับคู่ลูกหนี้ OP สิทธิเบิกได้ อปท. (LGO) กับ REP / Invoice e-Claim</h1>
+<p class="sub">ประมวลผลในเครื่องของผู้ใช้ทั้งหมด ไม่มีการส่งข้อมูลผู้ป่วยออกไปภายนอก</p>
+
+<div class="card up">
+  <div class="drop" id="dDebt">
+    <h3>1) รายการลูกหนี้ (จาก HOSxP)</h3>
+    <small>.xls / .xlsx / .csv — คอลัมน์ vstdate, hn, cid, ptname, debt_amount</small>
+    <input type="file" id="fDebt" accept=".xls,.xlsx,.csv" hidden>
+    <div class="st" id="sDebt">คลิกหรือลากไฟล์มาวาง</div>
+  </div>
+  <div class="drop" id="dRep">
+    <h3>2) ไฟล์ REP / Invoice OPLGO (eclaim_xxxxx_OPLGO_*.xls)</h3>
+    <small>เลือกได้หลายไฟล์ หรือ .zip ทั้งโฟลเดอร์ (รวมไฟล์ APPEAL ได้)</small>
+    <input type="file" id="fRep" accept=".xls,.xlsx,.zip" multiple hidden>
+    <div class="st" id="sRep">คลิกหรือลากไฟล์มาวาง</div>
+  </div>
+  <div style="grid-column:1/-1;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+    <button id="bRun" disabled>จับคู่ข้อมูล</button>
+    <label><input type="checkbox" id="cCid" checked> ใช้ CID + วันที่ เมื่อไม่พบ HN</label>
+    <label><input type="checkbox" id="cRange" checked> REP ที่ไม่มีในลูกหนี้: แสดงเฉพาะช่วงวันที่ของไฟล์ลูกหนี้</label>
+    <label>ส่วนต่างที่ยอมรับ ±<input type="number" id="tol" value="0.01" step="0.01" style="width:70px"> บาท</label>
+  </div>
+</div>
+
+<div id="res" class="hide">
+  <div class="card"><div class="kpis" id="kpis"></div></div>
+  <div class="card">
+    <div class="tabs">
+      <button data-t="match" class="on">ผลจับคู่รายตัว</button>
+      <button data-t="month">สรุปรายเดือน</button>
+      <button data-t="reponly">REP ที่ไม่มีในลูกหนี้</button>
+      <button data-t="files">ไฟล์ REP</button>
+    </div>
+    <div id="v-match">
+      <div class="tools">
+        <select id="fSt"></select><select id="fMon"></select>
+        <input id="q" placeholder="ค้นหา HN / CID / ชื่อ / Error" style="min-width:220px">
+        <button class="g" id="xMatch">ส่งออก Excel</button>
+        <span class="mut" id="cnt"></span>
+      </div>
+      <div class="tw"><table id="tM"></table></div>
+      <p class="note">คลิกที่แถวเพื่อดูรายการ REP ของ visit นั้น · รายการที่ขีดฆ่า = ถูกแทนที่ด้วย REP ฉบับหลัง (ส่งแก้/อุทธรณ์) ของ SEQ เดียวกัน</p>
+    </div>
+    <div id="v-month" class="hide"><div class="tools"><button class="g" id="xMon">ส่งออก Excel</button></div><div class="tw"><table id="tMo"></table></div></div>
+    <div id="v-reponly" class="hide"><div class="tools"><button class="g" id="xRo">ส่งออก Excel</button><span class="mut" id="cntRo"></span></div><div class="tw"><table id="tRo"></table></div></div>
+    <div id="v-files" class="hide"><div class="tw"><table id="tF"></table></div></div>
+  </div>
+  <div class="card note">
+    <b>หลักการจับคู่</b><br>
+    • คีย์หลัก HN + วันที่รับบริการ (ถ้าไม่พบใช้ CID + วันที่) — ถ้าวันเดียวกันมีหลาย visit จะรวมยอดทั้งวัน<br>
+    • REP ซ้ำ (REP + TRAN_ID เดียวกัน เช่นไฟล์ดาวน์โหลดซ้ำ) นับครั้งเดียว<br>
+    • visit เดียวกัน (SEQ NO เดียวกัน) ที่มีหลาย REP — ส่งใหม่หลังติด Error หรืออุทธรณ์ — ใช้ REP เลขล่าสุดเป็นยอดชดเชยสุทธิสุดท้าย<br>
+    • ยอดที่เปรียบเทียบ = ชดเชยสุทธิ (ค่ารักษา) กับยอดลูกหนี้ · แสดงยอดเรียกเก็บใน REP ประกอบ
+  </div>
+</div>
+</div>
+<footer>
+ออกแบบและพัฒนาโดย นายแพทย์กุลพล ตั้งรัตนาพิบูล<br>
+นายแพทย์ชำนาญการ (ด้านเวชกรรม)<br>
+ปฏิบัติหน้าที่ผู้อำนวยการ<a href="https://www.songkwaehospital.com/" target="_blank">โรงพยาบาลสองแคว</a> อำเภอสองแคว จังหวัดน่าน
+</footer>
+
+<script>
+/* ===== core (pure functions; รับ array-of-arrays) ===== */
+const ST={ok:'ตรงกัน',lo:'ชดเชยต่ำกว่าลูกหนี้',hi:'ชดเชยสูงกว่าลูกหนี้',er:'ติด Error / ชดเชย 0',na:'ไม่พบใน REP'};
+const num=v=>{if(v==null||v==='')return 0;if(typeof v==='number')return v;const n=parseFloat(String(v).replace(/,/g,''));return isNaN(n)?0:n};
+const s=v=>v==null?'':String(v).trim();
+const pad=n=>String(n).padStart(2,'0');
+function normHN(h){h=s(h);return /^\d+$/.test(h)?h.replace(/^0+/,''):h}
+function ymd(y,m,d){y=+y;if(y>2400)y-=543;if(y<100)y+=2000;return y+'-'+pad(+m)+'-'+pad(+d)}
+// date parser: excel serial / Date / string. order: 'dmy' | 'mdy'
+function pDate(v,order){
+  if(v==null||v==='')return '';
+  if(v instanceof Date)return ymd(v.getFullYear(),v.getMonth()+1,v.getDate());
+  if(typeof v==='number'){const d=(typeof XLSX!=='undefined')?XLSX.SSF.parse_date_code(v):null;if(d)return ymd(d.y,d.m,d.d);
+    const t=new Date(Math.round((v-25569)*864e5));return ymd(t.getUTCFullYear(),t.getUTCMonth()+1,t.getUTCDate())}
+  let x=String(v).trim(),m;
+  if(m=x.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/))return ymd(m[1],m[2],m[3]);
+  if(m=x.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4})/)){let a=+m[1],b=+m[2];
+    if(order==='mdy'&&a<=12&&b<=31&&!(b<=12&&+m[3]>2400))return ymd(m[3],a,b);
+    if(a>12)return ymd(m[3],b,a); if(b>12)return ymd(m[3],a,b); return order==='mdy'?ymd(m[3],a,b):ymd(m[3],b,a)}
+  return '';
+}
+function pTime(v){const m=String(v||'').match(/(\d{1,2}):(\d{2})/);return m?pad(m[1])+':'+m[2]:''}
+
+function parseDebt(aoa){
+  let hi=-1,c={};
+  const cand={date:['vstdate','visit_date','วันที่รับบริการ','วันที่'],hn:['hn'],cid:['cid','pid','เลขบัตรประชาชน'],name:['ptname','ชื่อ-สกุล','ชื่อ - สกุล','ชื่อ','name'],amt:['debt_amount','ลูกหนี้','ยอดลูกหนี้','amount','debt'],vn:['vn']};
+  for(let r=0;r<Math.min(aoa.length,20);r++){const row=(aoa[r]||[]).map(x=>s(x).toLowerCase());
+    if(row.includes('hn')){hi=r;for(const k in cand){const i=row.findIndex(h=>cand[k].includes(h));if(i>=0)c[k]=i}break}}
+  if(hi<0||c.hn==null||c.date==null||c.amt==null)throw new Error('ไม่พบหัวคอลัมน์ hn / vstdate / debt_amount');
+  // detect m/d/y vs d/m/y in string dates
+  let order='dmy',sa=0,sb=0;for(let r=hi+1;r<aoa.length;r++){const m=String(aoa[r]?.[c.date]??'').match(/^(\d{1,2})\/(\d{1,2})\//);if(m){if(+m[1]>12)sa++;if(+m[2]>12)sb++}}
+  if(sb>sa)order='mdy';
+  const out=[];
+  for(let r=hi+1;r<aoa.length;r++){const R=aoa[r];if(!R)continue;const hn=s(R[c.hn]);if(!hn)continue;
+    out.push({date:pDate(R[c.date],order),hn,hnk:normHN(hn),cid:s(R[c.cid]),name:s(R[c.name]),amt:num(R[c.amt]),vn:c.vn!=null?s(R[c.vn]):''})}
+  return out;
+}
+
+function parseRep(aoa,file){
+  let hi=-1;for(let r=0;r<Math.min(aoa.length,30);r++){if((aoa[r]||[]).some(x=>s(x)==='TRAN_ID')){hi=r;break}}
+  if(hi<0)return null;
+  const H=aoa[hi].map(s),H2=(aoa[hi+1]||[]).map(s),f=n=>H.indexOf(n);
+  const c={rep:f('REP'),tran:f('TRAN_ID'),hn:f('HN'),pid:f('PID'),name:f('ชื่อ - สกุล'),dt:f('วันเข้ารักษา'),comp:f('ชดเชยสุทธิ'),err:f('Error Code'),
+    claim:f('เรียกเก็บ'),seq:f('SEQ NO'),fund:f('กองทุน'),type:f('ประเภทผู้ป่วย'),main:f('สิทธิหลัก')};
+  let inv='';for(let r=0;r<hi;r++)for(const x of aoa[r]||[]){const m=s(x).match(/เลขที่เอกสาร\s+(\S+)/);if(m)inv=m[1]}
+  const rows=[];
+  for(let r=hi+1;r<aoa.length;r++){const R=aoa[r];if(!R)continue;const tran=s(R[c.tran]);if(!tran||!/\d/.test(tran))continue;
+    const dt=s(R[c.dt]);
+    rows.push({rep:s(R[c.rep]),tran,hn:s(R[c.hn]),hnk:normHN(R[c.hn]),cid:s(R[c.pid]),name:s(R[c.name]).replace(/\s+/g,' '),
+      date:pDate(R[c.dt],'dmy'),time:pTime(dt),comp:num(R[c.comp]),claim:c.claim>=0?num(R[c.claim]):0,
+      err:c.err>=0?s(R[c.err]):'',seq:c.seq>=0?s(R[c.seq]):'',fund:c.fund>=0?s(R[c.fund]):'',file,inv:inv||file})}
+  return {file,inv:inv||file,appeal:/APPEAL/i.test(file),rows};
+}
+
+function reconcile(debt,reps,opt){
+  opt=opt||{};const tol=opt.tol??0.01;
+  // 1) dedupe REP+TRAN_ID
+  const u=new Map(),dupFiles={};
+  for(const f of reps)for(const r of f.rows){const k=r.rep+'|'+r.tran;if(u.has(k)){dupFiles[f.file]=(dupFiles[f.file]||0)+1;continue}u.set(k,r)}
+  const all=[...u.values()];
+  // 2) per SEQ (fallback HN+date+time) keep latest REP
+  const g=new Map();
+  for(const r of all){const k=r.seq?'S'+r.seq:'T'+r.hnk+'|'+r.date+'|'+r.time;(g.get(k)||g.set(k,[]).get(k)).push(r)}
+  for(const arr of g.values()){arr.sort((a,b)=>a.rep.localeCompare(b.rep,undefined,{numeric:true})||(a.comp-b.comp));
+    arr.forEach((r,i)=>r.sup=i<arr.length-1)}
+  // 3) index by HN+date and CID+date
+  const byHN=new Map(),byCID=new Map();
+  for(const r of all){const k1=r.hnk+'|'+r.date;(byHN.get(k1)||byHN.set(k1,[]).get(k1)).push(r);
+    if(r.cid){const k2=r.cid+'|'+r.date;(byCID.get(k2)||byCID.set(k2,[]).get(k2)).push(r)}}
+  // 4) group debtor by HN+date
+  const dg=new Map();for(const d of debt){const k=d.hnk+'|'+d.date;(dg.get(k)||dg.set(k,[]).get(k)).push(d)}
+  const used=new Set(),res=[];
+  for(const [k,ds] of dg){
+    let rr=byHN.get(k),how='HN';
+    if((!rr||rr.every(r=>used.has(r)))&&opt.cid!==false&&ds[0].cid){const r2=byCID.get(ds[0].cid+'|'+ds[0].date);if(r2){rr=r2;how='CID'}}
+    rr=(rr||[]).filter(r=>!used.has(r));rr.forEach(r=>used.add(r));
+    const eff=rr.filter(r=>!r.sup);
+    const debtAmt=ds.reduce((a,d)=>a+d.amt,0),comp=eff.reduce((a,r)=>a+r.comp,0),claim=eff.reduce((a,r)=>a+r.claim,0);
+    const errs=[...new Set(eff.filter(r=>r.err&&r.err!=='-').map(r=>r.err))].join(', ');
+    let st;if(!rr.length)st='na';else if(Math.abs(debtAmt-comp)<=tol)st='ok';else if(comp<=0)st='er';else if(comp<debtAmt)st='lo';else st='hi';
+    res.push({key:k,date:ds[0].date,hn:ds[0].hn,cid:ds[0].cid,name:ds[0].name,nDebt:ds.length,debt:+debtAmt.toFixed(2),
+      nRep:eff.length,claim:+claim.toFixed(2),comp:+comp.toFixed(2),diff:+(debtAmt-comp).toFixed(2),err:errs,how:rr.length?how:'',
+      reps:[...new Set(eff.map(r=>r.rep))].join(', '),st,lines:rr})}
+  res.sort((a,b)=>a.date.localeCompare(b.date)||a.hn.localeCompare(b.hn));
+  // REP-only (effective lines not used)
+  const dates=debt.map(d=>d.date).filter(Boolean).sort();
+  const lo=dates[0],hi=dates[dates.length-1];
+  const ro=new Map();
+  for(const r of all){if(used.has(r))continue;if(opt.range!==false&&(r.date<lo||r.date>hi))continue;
+    const k=r.hnk+'|'+r.date;(ro.get(k)||ro.set(k,[]).get(k)).push(r)}
+  const repOnly=[...ro.values()].map(rr=>{const e=rr.filter(r=>!r.sup);return{date:rr[0].date,hn:rr[0].hn,cid:rr[0].cid,name:rr[0].name,
+    claim:+e.reduce((a,r)=>a+r.claim,0).toFixed(2),comp:+e.reduce((a,r)=>a+r.comp,0).toFixed(2),
+    err:[...new Set(e.filter(r=>r.err&&r.err!=='-').map(r=>r.err))].join(', '),reps:[...new Set(e.map(r=>r.rep))].join(', '),lines:rr}})
+    .sort((a,b)=>a.date.localeCompare(b.date));
+  return {res,repOnly,all,dupFiles,range:[lo,hi]};
+}
+if(typeof module!=='undefined')module.exports={parseDebt,parseRep,reconcile,pDate};
+
+/* ===== UI ===== */
+if(typeof document!=='undefined'){
+const $=id=>document.getElementById(id);
+const fmt=n=>(+n).toLocaleString('th-TH',{minimumFractionDigits:2,maximumFractionDigits:2});
+const TH_M=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+const thD=d=>{if(!d)return '';const[y,m,dd]=d.split('-');return +dd+' '+TH_M[m-1]+' '+(+y+543-2500)};
+const thM=m=>{const[y,mm]=m.split('-');return TH_M[mm-1]+' '+(+y+543)};
+const esc=x=>String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let DEBT=null,REPS=[],R=null,stF='',sortK=null,sortD=1;
+
+function setupDrop(d,inp,fn){d.onclick=()=>inp.click();inp.onchange=()=>fn([...inp.files]);
+  d.ondragover=e=>{e.preventDefault();d.classList.add('dg')};d.ondragleave=()=>d.classList.remove('dg');
+  d.ondrop=e=>{e.preventDefault();d.classList.remove('dg');fn([...e.dataTransfer.files])}}
+const readWB=buf=>XLSX.read(buf,{type:'array',cellDates:false,raw:false});
+const aoaOf=ws=>XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:''});
+
+setupDrop($('dDebt'),$('fDebt'),async fs=>{const f=fs[0];if(!f)return;$('sDebt').textContent='กำลังอ่าน...';
+  try{const wb=readWB(await f.arrayBuffer());let rows=null,err;
+    for(const n of wb.SheetNames){try{rows=parseDebt(aoaOf(wb.Sheets[n]));break}catch(e){err=e}}
+    if(!rows)throw err;DEBT=rows;const t=rows.reduce((a,r)=>a+r.amt,0);const ds=rows.map(r=>r.date).sort();
+    $('sDebt').textContent=`✔ ${f.name}\n${rows.length.toLocaleString()} รายการ · ${fmt(t)} บาท · ${thD(ds[0])} – ${thD(ds[ds.length-1])}`}
+  catch(e){DEBT=null;$('sDebt').textContent='✖ '+e.message}chk()});
+
+setupDrop($('dRep'),$('fRep'),async fs=>{$('sRep').textContent='กำลังอ่าน...';const items=[];
+  for(const f of fs){if(/\.zip$/i.test(f.name)){const z=await JSZip.loadAsync(await f.arrayBuffer());
+      for(const e of Object.values(z.files)){if(e.dir||!/\.xlsx?$/i.test(e.name)||/__MACOSX/.test(e.name))continue;items.push({name:e.name.split('/').pop(),buf:await e.async('arraybuffer')})}}
+    else items.push({name:f.name,buf:await f.arrayBuffer()})}
+  let ok=0,bad=[];
+  for(const it of items){try{const wb=readWB(it.buf);const sn=wb.SheetNames.find(n=>/detail/i.test(n))||wb.SheetNames[0];
+      let p=parseRep(aoaOf(wb.Sheets[sn]),it.name);
+      if(!p)for(const n of wb.SheetNames){p=parseRep(aoaOf(wb.Sheets[n]),it.name);if(p)break}
+      if(p){REPS=REPS.filter(x=>x.file!==it.name);REPS.push(p);ok++}else bad.push(it.name)}catch(e){bad.push(it.name)}}
+  const n=REPS.reduce((a,f)=>a+f.rows.length,0);
+  $('sRep').textContent=`✔ รวม ${REPS.length} ไฟล์ · ${n.toLocaleString()} รายการ`+(bad.length?`\n✖ อ่านไม่ได้ ${bad.length} ไฟล์: ${bad.slice(0,3).join(', ')}`:'')+`\n(เพิ่มไฟล์ได้อีก · ดับเบิลคลิกเพื่อล้าง)`;chk()});
+$('dRep').ondblclick=e=>{e.stopPropagation();REPS=[];$('sRep').textContent='ล้างแล้ว — คลิกหรือลากไฟล์มาวาง';chk()};
+function chk(){$('bRun').disabled=!(DEBT&&REPS.length)}
+
+$('bRun').onclick=()=>{R=reconcile(DEBT,REPS,{cid:$('cCid').checked,range:$('cRange').checked,tol:num($('tol').value)});
+  $('res').classList.remove('hide');stF='';
+  const ms=[...new Set(R.res.map(r=>r.date.slice(0,7)))].sort();
+  $('fMon').innerHTML='<option value="">ทุกเดือน</option>'+ms.map(m=>`<option value="${m}">${thM(m)}</option>`).join('');
+  $('fSt').innerHTML='<option value="">ทุกสถานะ</option>'+Object.entries(ST).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
+  kpi();drawM();drawMo();drawRo();drawF()};
+
+function kpi(){const g={};for(const k in ST)g[k]={n:0,d:0,c:0};for(const r of R.res){g[r.st].n++;g[r.st].d+=r.debt;g[r.st].c+=r.comp}
+  const T={n:R.res.length,d:R.res.reduce((a,r)=>a+r.debt,0),c:R.res.reduce((a,r)=>a+r.comp,0)};
+  const ro=R.repOnly.reduce((a,r)=>a+r.comp,0);
+  let h=`<div class="k ${stF===''?'sel':''}" data-s=""><div class="l">ลูกหนี้ทั้งหมด (visit-วัน)</div><div class="v">${T.n.toLocaleString()}</div><div class="a">ลูกหนี้ ${fmt(T.d)}<br>ชดเชย ${fmt(T.c)}<br>คงเหลือ <b>${fmt(T.d-T.c)}</b></div></div>`;
+  for(const k in ST)h+=`<div class="k ${k} ${stF===k?'sel':''}" data-s="${k}"><div class="l">${ST[k]}</div><div class="v">${g[k].n.toLocaleString()}</div><div class="a">ลูกหนี้ ${fmt(g[k].d)}<br>ชดเชย ${fmt(g[k].c)}<br>ส่วนต่าง ${fmt(g[k].d-g[k].c)}</div></div>`;
+  h+=`<div class="k" data-t="reponly"><div class="l">REP ที่ไม่มีในลูกหนี้</div><div class="v">${R.repOnly.length.toLocaleString()}</div><div class="a">ชดเชย ${fmt(ro)}</div></div>`;
+  $('kpis').innerHTML=h;
+  $('kpis').querySelectorAll('.k').forEach(e=>e.onclick=()=>{if(e.dataset.t){tab('reponly');return}stF=e.dataset.s;$('fSt').value=stF;tab('match');kpi();drawM()})}
+
+const COLS=[['date','วันที่รับบริการ'],['hn','HN'],['cid','CID'],['name','ชื่อ-สกุล'],['nDebt','ลูกหนี้ (รายการ)','n'],['debt','ยอดลูกหนี้','n'],
+  ['nRep','REP (visit)','n'],['claim','เรียกเก็บ','n'],['comp','ชดเชยสุทธิ','n'],['diff','ส่วนต่าง (ลูกหนี้-ชดเชย)','n'],['st','สถานะ'],['err','Error Code'],['reps','REP No.'],['how','จับคู่ด้วย']];
+function filtered(){const q=$('q').value.trim().toLowerCase(),m=$('fMon').value;stF=$('fSt').value;
+  let a=R.res.filter(r=>(!stF||r.st===stF)&&(!m||r.date.startsWith(m))&&(!q||(r.hn+' '+r.cid+' '+r.name+' '+r.err+' '+r.reps).toLowerCase().includes(q)));
+  if(sortK)a=[...a].sort((x,y)=>(typeof x[sortK]==='number'?x[sortK]-y[sortK]:String(x[sortK]).localeCompare(String(y[sortK])))*sortD);return a}
+function drawM(){const a=filtered();const sum=k=>a.reduce((t,r)=>t+r[k],0);
+  let h='<thead><tr>'+COLS.map(c=>`<th class="${c[2]||''}" data-k="${c[0]}">${c[1]}${sortK===c[0]?(sortD>0?' ▲':' ▼'):''}</th>`).join('')+'</tr></thead><tbody>';
+  for(const [i,r] of a.slice(0,3000).entries())h+=`<tr class="x" data-i="${R.res.indexOf(r)}"><td>${thD(r.date)}</td><td>${esc(r.hn)}</td><td>${esc(r.cid)}</td><td>${esc(r.name)}</td><td class="n">${r.nDebt}</td><td class="n">${fmt(r.debt)}</td><td class="n">${r.nRep}</td><td class="n">${fmt(r.claim)}</td><td class="n">${fmt(r.comp)}</td><td class="n ${r.diff>0.005?'neg':r.diff<-0.005?'pos':''}">${fmt(r.diff)}</td><td><span class="tag t-${r.st}">${ST[r.st]}</span></td><td>${esc(r.err)}</td><td>${esc(r.reps)}</td><td>${r.how}</td></tr>`;
+  h+=`</tbody><tfoot><tr><td colspan="4">รวม ${a.length.toLocaleString()} รายการ${a.length>3000?' (แสดง 3,000 แถวแรก)':''}</td><td class="n">${sum('nDebt')}</td><td class="n">${fmt(sum('debt'))}</td><td class="n">${sum('nRep')}</td><td class="n">${fmt(sum('claim'))}</td><td class="n">${fmt(sum('comp'))}</td><td class="n">${fmt(sum('diff'))}</td><td colspan="4"></td></tr></tfoot>`;
+  $('tM').innerHTML=h;$('cnt').textContent=a.length.toLocaleString()+' รายการ';
+  $('tM').querySelectorAll('th').forEach(t=>t.onclick=()=>{const k=t.dataset.k;sortD=sortK===k?-sortD:1;sortK=k;drawM()});
+  $('tM').querySelectorAll('tr.x').forEach(t=>t.onclick=()=>{const n=t.nextElementSibling;if(n&&n.classList.contains('det')){n.remove();return}
+    const r=R.res[t.dataset.i];const d=document.createElement('tr');d.className='det';d.innerHTML=`<td colspan="${COLS.length}">${lineTable(r.lines)}</td>`;t.after(d)})}
+function lineTable(L){if(!L.length)return '<span class="mut">ไม่พบรายการใน REP ที่อัปโหลด</span>';
+  return '<table class="inner"><tr><th>REP</th><th>TRAN_ID</th><th>SEQ NO</th><th>เวลา</th><th class="n">เรียกเก็บ</th><th class="n">ชดเชยสุทธิ</th><th>Error</th><th>กองทุน</th><th>ไฟล์</th><th></th></tr>'+
+  [...L].sort((a,b)=>a.time.localeCompare(b.time)||a.rep.localeCompare(b.rep)).map(r=>`<tr class="${r.sup?'s':''}"><td>${r.rep}</td><td>${r.tran}</td><td>${r.seq}</td><td>${r.time}</td><td class="n">${fmt(r.claim)}</td><td class="n">${fmt(r.comp)}</td><td>${esc(r.err)}</td><td>${esc(r.fund)}</td><td>${esc(r.file)}</td><td>${r.sup?'ถูกแทนที่':''}</td></tr>`).join('')+'</table>'}
+['q','fMon','fSt'].forEach(id=>$(id).addEventListener('input',()=>{drawM();kpi()}));
+
+function monthRows(){const m=new Map();for(const r of R.res){const k=r.date.slice(0,7);const o=m.get(k)||m.set(k,{m:k,n:0,d:0,c:0,ok:0,lo:0,hi:0,er:0,na:0,naAmt:0}).get(k);
+  o.n++;o.d+=r.debt;o.c+=r.comp;o[r.st]++;if(r.st==='na')o.naAmt+=r.debt}
+  return [...m.values()].sort((a,b)=>a.m.localeCompare(b.m))}
+function drawMo(){const a=monthRows();const S=k=>a.reduce((t,r)=>t+r[k],0);
+  $('tMo').innerHTML='<thead><tr><th>เดือน</th><th class="n">visit</th><th class="n">ยอดลูกหนี้</th><th class="n">ชดเชยสุทธิ</th><th class="n">คงเหลือ</th><th class="n">% ได้รับ</th><th class="n">ตรงกัน</th><th class="n">ต่ำกว่า</th><th class="n">สูงกว่า</th><th class="n">Error/0</th><th class="n">ไม่พบ REP</th><th class="n">ยอดไม่พบ REP</th></tr></thead><tbody>'+
+  a.map(r=>`<tr><td>${thM(r.m)}</td><td class="n">${r.n}</td><td class="n">${fmt(r.d)}</td><td class="n">${fmt(r.c)}</td><td class="n">${fmt(r.d-r.c)}</td><td class="n">${r.d?(r.c/r.d*100).toFixed(1):'-'}%</td><td class="n">${r.ok}</td><td class="n">${r.lo}</td><td class="n">${r.hi}</td><td class="n">${r.er}</td><td class="n">${r.na}</td><td class="n">${fmt(r.naAmt)}</td></tr>`).join('')+
+  `</tbody><tfoot><tr><td>รวม</td><td class="n">${S('n')}</td><td class="n">${fmt(S('d'))}</td><td class="n">${fmt(S('c'))}</td><td class="n">${fmt(S('d')-S('c'))}</td><td class="n">${S('d')?(S('c')/S('d')*100).toFixed(1):'-'}%</td><td class="n">${S('ok')}</td><td class="n">${S('lo')}</td><td class="n">${S('hi')}</td><td class="n">${S('er')}</td><td class="n">${S('na')}</td><td class="n">${fmt(S('naAmt'))}</td></tr></tfoot>`}
+function drawRo(){const a=R.repOnly;
+  $('tRo').innerHTML='<thead><tr><th>วันที่รับบริการ</th><th>HN</th><th>CID</th><th>ชื่อ-สกุล</th><th class="n">เรียกเก็บ</th><th class="n">ชดเชยสุทธิ</th><th>Error</th><th>REP No.</th></tr></thead><tbody>'+
+  a.map((r,i)=>`<tr class="x" data-i="${i}"><td>${thD(r.date)}</td><td>${esc(r.hn)}</td><td>${esc(r.cid)}</td><td>${esc(r.name)}</td><td class="n">${fmt(r.claim)}</td><td class="n">${fmt(r.comp)}</td><td>${esc(r.err)}</td><td>${esc(r.reps)}</td></tr>`).join('')+
+  `</tbody><tfoot><tr><td colspan="4">รวม ${a.length} รายการ</td><td class="n">${fmt(a.reduce((t,r)=>t+r.claim,0))}</td><td class="n">${fmt(a.reduce((t,r)=>t+r.comp,0))}</td><td colspan="2"></td></tr></tfoot>`;
+  $('cntRo').textContent=$('cRange').checked&&R.range[0]?`เฉพาะวันที่ ${thD(R.range[0])} – ${thD(R.range[1])}`:'ทุกช่วงวันที่';
+  $('tRo').querySelectorAll('tr.x').forEach(t=>t.onclick=()=>{const n=t.nextElementSibling;if(n&&n.classList.contains('det')){n.remove();return}
+    const d=document.createElement('tr');d.className='det';d.innerHTML=`<td colspan="8">${lineTable(a[t.dataset.i].lines)}</td>`;t.after(d)})}
+function drawF(){const fs=[...REPS].sort((a,b)=>a.file.localeCompare(b.file));
+  $('tF').innerHTML='<thead><tr><th>ไฟล์</th><th>ประเภท</th><th>REP No.</th><th class="n">รายการ</th><th class="n">ซ้ำ (ไม่นับ)</th><th class="n">เรียกเก็บ</th><th class="n">ชดเชยสุทธิ</th><th class="n">ติด Error</th></tr></thead><tbody>'+
+  fs.map(f=>`<tr><td>${esc(f.file)}</td><td>${f.appeal?'<span class="tag t-hi">อุทธรณ์</span>':'ปกติ'}</td><td>${[...new Set(f.rows.map(r=>r.rep))].join(', ')}</td><td class="n">${f.rows.length}</td><td class="n">${R.dupFiles[f.file]||''}</td><td class="n">${fmt(f.rows.reduce((t,r)=>t+r.claim,0))}</td><td class="n">${fmt(f.rows.reduce((t,r)=>t+r.comp,0))}</td><td class="n">${f.rows.filter(r=>r.err&&r.err!=='-').length||''}</td></tr>`).join('')+'</tbody>'}
+
+function tab(t){document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+  ['match','month','reponly','files'].forEach(x=>$('v-'+x).classList.toggle('hide',x!==t))}
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>tab(b.dataset.t));
+
+function xl(name,sheets){const wb=XLSX.utils.book_new();for(const [n,rows] of sheets)XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(rows),n);XLSX.writeFile(wb,name)}
+const lineRows=L=>L.map(r=>({'วันที่':r.date,HN:r.hn,CID:r.cid,'ชื่อ-สกุล':r.name,REP:r.rep,TRAN_ID:r.tran,'SEQ NO':r.seq,'เวลา':r.time,'เรียกเก็บ':r.claim,'ชดเชยสุทธิ':r.comp,'Error':r.err,'ถูกแทนที่':r.sup?'Y':'',ไฟล์:r.file}));
+$('xMatch').onclick=()=>{const a=filtered();xl('match_oplgo.xlsx',[['ผลจับคู่',a.map(r=>({'วันที่รับบริการ':r.date,HN:r.hn,CID:r.cid,'ชื่อ-สกุล':r.name,'จำนวนรายการลูกหนี้':r.nDebt,'ยอดลูกหนี้':r.debt,'REP (visit)':r.nRep,'เรียกเก็บ':r.claim,'ชดเชยสุทธิ':r.comp,'ส่วนต่าง':r.diff,'สถานะ':ST[r.st],'Error Code':r.err,'REP No.':r.reps,'จับคู่ด้วย':r.how}))],
+  ['รายการ REP',lineRows(a.flatMap(r=>r.lines))]])};
+$('xMon').onclick=()=>xl('month_oplgo.xlsx',[['สรุปรายเดือน',monthRows().map(r=>({'เดือน':thM(r.m),visit:r.n,'ยอดลูกหนี้':+r.d.toFixed(2),'ชดเชยสุทธิ':+r.c.toFixed(2),'คงเหลือ':+(r.d-r.c).toFixed(2),'ตรงกัน':r.ok,'ต่ำกว่า':r.lo,'สูงกว่า':r.hi,'Error/0':r.er,'ไม่พบ REP':r.na,'ยอดไม่พบ REP':+r.naAmt.toFixed(2)}))]]);
+$('xRo').onclick=()=>xl('rep_not_in_debt.xlsx',[['REP ไม่มีในลูกหนี้',R.repOnly.map(r=>({'วันที่รับบริการ':r.date,HN:r.hn,CID:r.cid,'ชื่อ-สกุล':r.name,'เรียกเก็บ':r.claim,'ชดเชยสุทธิ':r.comp,Error:r.err,'REP No.':r.reps}))],['รายการ',lineRows(R.repOnly.flatMap(r=>r.lines))]]);
+}
+</script>
+</body>
+</html>
