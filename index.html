@@ -11,11 +11,11 @@
 :root{--bg:#f4f6f9;--card:#fff;--ink:#1f2933;--mut:#66788a;--line:#e1e6ec;--pri:#0f6e8c;--pri2:#e6f3f7;
 --ok:#1a8a4a;--okb:#e5f5ec;--lo:#c2410c;--lob:#fff0e6;--hi:#6d28d9;--hib:#f1eafe;--er:#b91c1c;--erb:#fdecec;--na:#64748b;--nab:#eef1f5}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Sarabun,system-ui,sans-serif;font-size:15px}
-.nav{background:#0b3d4f;color:#fff;padding:8px 16px;display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center}
-.nav b{margin-right:10px}.nav a{color:#cfe8f0;text-decoration:none;padding:4px 10px;border-radius:6px;font-size:14px}
-.nav a:hover{background:#ffffff1f}.nav a.on{background:#fff;color:#0b3d4f;font-weight:700}
+.nav{background:#17574a;color:#fff;padding:8px 16px;display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center}
+.nav b{margin-right:10px}.nav a{color:#cfe5dc;text-decoration:none;padding:4px 10px;border-radius:6px;font-size:14px}
+.nav a:hover{background:#ffffff1f}.nav a.on{background:#fff;color:#17574a;font-weight:700}
 .wrap{max-width:1400px;margin:0 auto;padding:16px}
-h1{font-size:22px;margin:6px 0 2px}.sub{color:var(--mut);margin:0 0 14px}
+h1{font-size:22px;margin:6px 0 2px}.sub{color:var(--mut);margin:0 0 14px}header.drk-hero{margin-bottom:14px!important}
 .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px}
 .up{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:800px){.up{grid-template-columns:1fr}}
@@ -48,26 +48,18 @@ footer{text-align:center;color:var(--mut);font-size:13px;line-height:1.7;padding
 </head>
 <body>
 <!-- ===== DRK debtor nav (เหมือนกันทุก repo) : วางไว้ต่อจาก <body> ทันที ===== -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;600;700&display=swap">
-<style>
-.drk-nav{all:initial;display:block;position:relative;z-index:1000;background:#ffffff;border-bottom:1px solid #dde3df;font-family:"IBM Plex Sans Thai",system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;line-height:1.4}
-.drk-nav *{box-sizing:border-box;font-family:inherit}
-.drk-nav .drk-in{max-width:1180px;margin:0 auto;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px}
-.drk-nav .drk-brand{font-weight:700;font-size:14px;color:#1f6f5c;white-space:nowrap}
-.drk-nav .drk-links{display:flex;flex-wrap:wrap;gap:6px;min-width:0}
-.drk-nav a{font-size:13.5px;color:#1b2420;text-decoration:none;padding:5px 11px;border-radius:999px;border:1px solid #dde3df;background:#ffffff;white-space:nowrap;font-weight:400}
-.drk-nav a:hover{border-color:#1f6f5c;color:#1f6f5c}
-.drk-nav a:focus-visible{outline:2px solid #1f6f5c;outline-offset:2px}
-.drk-nav a[aria-current="page"]{background:#1f6f5c;border-color:#1f6f5c;color:#ffffff;font-weight:600}
-</style>
-<nav class="drk-nav" aria-label="ระบบตรวจสอบลูกหนี้รายตัว"><div class="drk-in"><span class="drk-brand">ตรวจสอบลูกหนี้รายตัว</span><div class="drk-links"><a href="https://drkulapol.github.io/opofc/index.html" data-repo="opofc">ลูกหนี้ OP เบิกได้</a><a href="https://drkulapol.github.io/ipofc/index.html" data-repo="ipofc">ลูกหนี้ IPD เบิกได้</a><a href="https://drkulapol.github.io/ipuc/index.html" data-repo="ipuc">ลูกหนี้ IPD UC</a><a href="https://drkulapol.github.io/check-op-uc/index.html" data-repo="check-op-uc">ลูกหนี้ OP UC ON TOP</a><a href="https://drkulapol.github.io/opstp/index.html" data-repo="opstp">ลูกหนี้ OP STP</a><a href="https://drkulapol.github.io/ipstp/index.html" data-repo="ipstp">ลูกหนี้ IP STP</a><a href="https://drkulapol.github.io/oplgo/index.html" data-repo="oplgo">ลูกหนี้ OP LGO</a><a href="https://drkulapol.github.io/iplgo/index.html" data-repo="iplgo">ลูกหนี้ IP LGO</a></div></div></nav>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style id="drk-nav-css">.drk-nav{all:initial;display:block;position:relative;z-index:1000;background:#ffffff;border-bottom:1px solid #dbe3df;box-shadow:0 1px 2px rgba(24,35,31,.04);font-family:"IBM Plex Sans Thai",system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;line-height:1.4}.drk-nav *{box-sizing:border-box;font-family:inherit}.drk-nav .drk-in{max-width:1180px;margin:0 auto;padding:8px max(16px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px))}.drk-nav .drk-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;padding:5px 0}.drk-nav .drk-row+.drk-row{border-top:1px dashed #dbe3df}.drk-nav .drk-brand{flex:0 0 auto;min-width:10.5em;font-weight:700;font-size:13.5px;color:#1f6f5c;white-space:nowrap;display:inline-flex;align-items:center;gap:7px}.drk-nav .drk-brand::before{content:"";width:4px;height:16px;border-radius:2px;background:#1f6f5c}.drk-nav .drk-links{display:flex;flex-wrap:wrap;gap:6px;min-width:0;flex:1 1 0}.drk-nav a{font-size:13.5px;color:#18231f;text-decoration:none;padding:4px 11px;border-radius:999px;border:1px solid #dbe3df;background:#ffffff;white-space:nowrap;font-weight:400;transition:border-color .15s,color .15s,background .15s}.drk-nav a:hover{border-color:#1f6f5c;color:#1f6f5c;background:#f1f7f4}.drk-nav a:focus-visible{outline:2px solid #1f6f5c;outline-offset:2px}.drk-nav a[aria-current="page"]{background:#1f6f5c;border-color:#1f6f5c;color:#ffffff;font-weight:600}@media (max-width:640px){.drk-nav .drk-brand{min-width:0;flex-basis:100%}}@media (prefers-reduced-motion:reduce){.drk-nav a{transition:none}}</style>
+<!-- ธีมกลาง: สี/ฟอนต์/หัวเรื่อง ให้ทุกเว็บอยู่โทนเดียวกัน -->
+<style id="drk-theme">:root{--drk-accent:#1f6f5c;--drk-accent-d:#17574a;--drk-accent-soft:#e2f0eb;--drk-bg:#f5f7f6;--drk-ink:#18231f;--drk-muted:#5a6a64;--drk-line:#dbe3df;--drk-font:"IBM Plex Sans Thai",system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;--drk-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace}html:root:root:root{color-scheme:light;--bg:#f5f7f6;--card:#ffffff;--ink:#18231f;--mut:#5a6a64;--line:#dbe3df;--pri:#1f6f5c;--pri2:#e2f0eb;--ok:#1d7a4a;--okb:#e1f3e8;--er:#b3322b;--erb:#fbe6e3;}html body{margin:0;font-family:var(--drk-font);background:var(--drk-bg);color:var(--drk-ink)}html body h1,html body h2,html body h3{font-family:var(--drk-font)}html body footer{text-align:center}html body footer a{color:var(--drk-accent)}html body header.drk-hero{background:var(--drk-accent);color:#fff;border:0;border-radius:10px;padding:20px 24px;margin:0}html body header.drk-hero h1{color:#fff;font-size:22px;font-weight:700;line-height:1.3;margin:0}html body header.drk-hero p,html body header.drk-hero .sub,html body header.drk-hero .lbl,html body header.drk-hero .eyebrow{color:rgba(255,255,255,.88)}html body header.drk-hero p,html body header.drk-hero .sub{margin:4px 0 0}html body header.drk-hero button{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.65)}html body header.drk-hero button:hover{background:rgba(255,255,255,.12);border-color:#fff}html body header.drk-hero button.primary{background:#fff;color:var(--drk-accent);border-color:#fff;font-weight:600}html body header.drk-hero button:disabled{opacity:.55}html body header.drk-hero button:focus-visible{outline:2px solid #fff;outline-offset:2px}html body header.drk-hero .guidelink{border:0;padding:0;background:none;color:#fff;text-decoration:underline}</style>
+<nav class="drk-nav" aria-label="เมนูระบบงานประกัน"><div class="drk-in"><div class="drk-row"><span class="drk-brand">ตรวจสอบลูกหนี้รายตัว</span><div class="drk-links"><a href="https://drkulapol.github.io/opofc/index.html" data-repo="opofc">ลูกหนี้ OP เบิกได้</a><a href="https://drkulapol.github.io/ipofc/index.html" data-repo="ipofc">ลูกหนี้ IPD เบิกได้</a><a href="https://drkulapol.github.io/ipuc/index.html" data-repo="ipuc">ลูกหนี้ IPD UC</a><a href="https://drkulapol.github.io/check-op-uc/index.html" data-repo="check-op-uc">ลูกหนี้ OP UC ON TOP</a><a href="https://drkulapol.github.io/opstp/index.html" data-repo="opstp">ลูกหนี้ OP STP</a><a href="https://drkulapol.github.io/ipstp/index.html" data-repo="ipstp">ลูกหนี้ IP STP</a><a href="https://drkulapol.github.io/oplgo/index.html" data-repo="oplgo">ลูกหนี้ OP LGO</a><a href="https://drkulapol.github.io/iplgo/index.html" data-repo="iplgo">ลูกหนี้ IP LGO</a></div></div><div class="drk-row"><span class="drk-brand">ข้อมูลกองทุนย่อย</span><div class="drk-links"><a href="https://drkulapol.github.io/tb/index.html" data-repo="tb">คัดกรอง CXR TB</a><a href="https://drkulapol.github.io/auditopd/index.html" data-repo="auditopd">ตรวจสอบ OPD OFC LGO</a><a href="https://drkulapol.github.io/dm-remission/index.html" data-repo="dm-remission">DM remission</a></div></div></div></nav>
 <script>(function(){var nav=document.querySelector(".drk-nav");if(!nav)return;var s=(location.pathname.split("/")[1]||"").toLowerCase(),n=nav.querySelectorAll("a[data-repo]"),hit=null;for(var i=0;i<n.length;i++)if(n[i].getAttribute("data-repo")===s)hit=n[i];if(hit){for(var j=0;j<n.length;j++)n[j].removeAttribute("aria-current");hit.setAttribute("aria-current","page");}
 /* ให้แถบชิดขอบจอเหมือนกันทุกเว็บ ไม่ว่า body ของแต่ละเว็บจะมี margin/padding เท่าไร */
 if(nav.parentElement===document.body){var b=getComputedStyle(document.body),f=function(p){return(parseFloat(b["margin"+p])||0)+(parseFloat(b["padding"+p])||0)},t=f("Top"),l=f("Left"),r=f("Right");nav.style.margin="-"+t+"px -"+r+"px "+t+"px -"+l+"px";}})();</script>
 <!-- ===== /DRK debtor nav ===== -->
 <div class="wrap">
-<h1>จับคู่ลูกหนี้ OP สิทธิเบิกได้ อปท. (LGO) กับ REP / Invoice e-Claim</h1>
-<p class="sub">ประมวลผลในเครื่องของผู้ใช้ทั้งหมด ไม่มีการส่งข้อมูลผู้ป่วยออกไปภายนอก</p>
+<header class="drk-hero"><h1>จับคู่ลูกหนี้ OP สิทธิเบิกได้ อปท. (LGO) กับ REP / Invoice e-Claim</h1>
+<p class="sub">ประมวลผลในเครื่องของผู้ใช้ทั้งหมด ไม่มีการส่งข้อมูลผู้ป่วยออกไปภายนอก</p></header>
 
 <div class="card up">
   <div class="drop" id="dDebt">
